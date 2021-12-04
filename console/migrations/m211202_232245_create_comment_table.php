@@ -19,7 +19,6 @@ class m211202_232245_create_comment_table extends Migration
             'article_id' => $this->integer(),
             'status' => $this->integer(),
         ]);
-
         // user_id for comment
         // create index for column 'user_id'
         $this->createIndex(
@@ -36,7 +35,7 @@ class m211202_232245_create_comment_table extends Migration
             'user_id',
             'user',
             'id',
-            'CASCADE'
+            'SET NULL'
         );
 
         // article_id for comment
