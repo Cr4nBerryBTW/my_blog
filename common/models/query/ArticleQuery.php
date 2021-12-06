@@ -2,12 +2,16 @@
 
 namespace common\models\query;
 
+use common\models\Article;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Article]].
  *
  * @see \common\models\Article
  */
-class ArticleQuery extends \yii\db\ActiveQuery
+class ArticleQuery extends ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +20,7 @@ class ArticleQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Article[]|array
+     * @return Article[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +29,7 @@ class ArticleQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Article|array|null
+     * @return array|ActiveRecord|null
      */
     public function one($db = null)
     {

@@ -2,12 +2,16 @@
 
 namespace common\models\query;
 
+use common\models\ArticleTag;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
+
 /**
  * This is the ActiveQuery class for [[\common\models\ArticleTag]].
  *
  * @see \common\models\ArticleTag
  */
-class ArticleTagQuery extends \yii\db\ActiveQuery
+class ArticleTagQuery extends ActiveQuery
 {
     /*public function active()
     {
@@ -16,16 +20,16 @@ class ArticleTagQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\ArticleTag[]|array
+     * @return ArticleTag[]|array
      */
-    public function all($db = null)
+    public function all($db = null): array
     {
         return parent::all($db);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\models\ArticleTag|array|null
+     * @return array|ActiveRecord|null
      */
     public function one($db = null)
     {

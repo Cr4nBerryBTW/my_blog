@@ -2,12 +2,16 @@
 
 namespace common\models\query;
 
+use common\models\Tag;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Tag]].
  *
  * @see \common\models\Tag
  */
-class TagQuery extends \yii\db\ActiveQuery
+class TagQuery extends ActiveQuery
 {
     /*public function active()
     {
@@ -16,16 +20,16 @@ class TagQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Tag[]|array
+     * @return Tag[]|array
      */
-    public function all($db = null)
+    public function all($db = null): array
     {
         return parent::all($db);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Tag|array|null
+     * @return array|ActiveRecord|null
      */
     public function one($db = null)
     {

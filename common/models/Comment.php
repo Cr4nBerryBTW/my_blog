@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+
 use common\models\query\CommentQuery;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;

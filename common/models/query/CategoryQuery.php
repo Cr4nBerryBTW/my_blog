@@ -2,12 +2,16 @@
 
 namespace common\models\query;
 
+use common\models\Category;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Category]].
  *
  * @see \common\models\Category
  */
-class CategoryQuery extends \yii\db\ActiveQuery
+class CategoryQuery extends ActiveQuery
 {
     /*public function active()
     {
@@ -16,16 +20,16 @@ class CategoryQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Category[]|array
+     * @return Category[]|array
      */
-    public function all($db = null)
+    public function all($db = null): array
     {
         return parent::all($db);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Category|array|null
+     * @return array|ActiveRecord|null
      */
     public function one($db = null)
     {
