@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
+use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -15,6 +16,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\Response;
 
 /**
  * Site controller
@@ -71,9 +73,9 @@ class SiteController extends Controller
     /**
      * Displays homepage.
      *
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         return $this->render('index');
     }
@@ -81,7 +83,7 @@ class SiteController extends Controller
     /**
      * Logs in a user.
      *
-     * @return mixed
+     * @return Response|string
      */
     public function actionLogin()
     {
@@ -104,9 +106,9 @@ class SiteController extends Controller
     /**
      * Logs out the current user.
      *
-     * @return mixed
+     * @return Response
      */
-    public function actionLogout()
+    public function actionLogout(): Response
     {
         Yii::$app->user->logout();
 
@@ -116,7 +118,7 @@ class SiteController extends Controller
     /**
      * Displays contact page.
      *
-     * @return mixed
+     * @return Response|string
      */
     public function actionContact()
     {
@@ -139,9 +141,9 @@ class SiteController extends Controller
     /**
      * Displays about page.
      *
-     * @return mixed
+     * @return string
      */
-    public function actionAbout()
+    public function actionAbout(): string
     {
         return $this->render('about');
     }
@@ -149,7 +151,8 @@ class SiteController extends Controller
     /**
      * Signs user up.
      *
-     * @return mixed
+     * @return Response|string
+     * @throws Exception
      */
     public function actionSignup()
     {
@@ -167,7 +170,8 @@ class SiteController extends Controller
     /**
      * Requests password reset.
      *
-     * @return mixed
+     * @return Response|string
+     * @throws Exception
      */
     public function actionRequestPasswordReset()
     {
@@ -191,8 +195,8 @@ class SiteController extends Controller
      * Resets password.
      *
      * @param string $token
-     * @return mixed
-     * @throws BadRequestHttpException
+     * @return string|Response
+     * @throws BadRequestHttpException|Exception
      */
     public function actionResetPassword(string $token)
     {
@@ -217,10 +221,10 @@ class SiteController extends Controller
      * Verify email address
      *
      * @param string $token
-     * @return yii\web\Response
+     * @return Response
      *@throws BadRequestHttpException
      */
-    public function actionVerifyEmail(string $token): Yii\web\Response
+    public function actionVerifyEmail(string $token): Response
     {
         try {
             $model = new VerifyEmailForm($token);
@@ -239,7 +243,7 @@ class SiteController extends Controller
     /**
      * Resend verification email
      *
-     * @return mixed
+     * @return Response|string
      */
     public function actionResendVerificationEmail()
     {

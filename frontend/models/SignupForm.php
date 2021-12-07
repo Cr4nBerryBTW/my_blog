@@ -12,9 +12,9 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
-    public string $username;
-    public string $email;
-    public string $password;
+    public ?string $username = null;
+    public ?string $email = null;
+    public ?string $password = null;
 
 
     /**
@@ -58,7 +58,7 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
 
-        return $user->save() && $this->sendEmail($user);
+        return $user->save() /*&& $this->sendEmail($user)*/;
     }
 
     /**

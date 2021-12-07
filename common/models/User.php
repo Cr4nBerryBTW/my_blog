@@ -44,10 +44,6 @@ class User extends ActiveRecord implements IdentityInterface
         return '{{%user}}';
     }
 
-    public static function findByVerificationToken(string $token)
-    {
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -66,13 +62,14 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['role', 'default', 'value' => self::ROLE_USER],
             ['role', 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_MODERATOR, self::ROLE_USER]],
         ];
     }
-
+/**/
     public static function isUserAdmin($username): bool
     {
-        if (static::findOne(['email' => $username, 'role' => self::ROLE_ADMIN]))
+        if (static::findOne(['username' => $username, 'role' => self::ROLE_ADMIN]))
         {
             return true;
         } else {
@@ -82,7 +79,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function isUserModerator($username): bool
     {
-        if (static::findOne(['email' => $username, 'role' => self::ROLE_MODERATOR]))
+        if (static::findOne(['username' => $username, 'role' => self::ROLE_MODERATOR]))
         {
             return true;
         } else {
@@ -111,12 +108,13 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Finds user by username
      *
-     * @param string $username
+     * @param string|null $username
      * @return static|null
      */
-    public static function findByName(string $username): ?User
+    public static function findByName(?string $username): ?User
     {
-        return static::findOne(['email' => $username, 'status' => self::STATUS_ACTIVE]);
+
+        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -186,6 +184,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validatePassword(string $password): bool
     {
+
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
 
