@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\models\query\TagQuery;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -49,10 +50,12 @@ class Tag extends ActiveRecord
      * Gets query for [[ArticleTags]].
      *
      * @return ActiveQuery
+     * @throws InvalidConfigException
      */
-    public function getArticleTags(): ActiveQuery
+    public function getArticles(): ActiveQuery
     {
-        return $this->hasMany(ArticleTag::class, ['tag_id' => 'id']);
+        return $this->hasMany(Article::class, ['id' => 'article_id'])->
+        viaTable('article_tag', ['tag_id' => 'id']);
     }
 
     /**

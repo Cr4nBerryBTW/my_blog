@@ -42,6 +42,11 @@ class Category extends ActiveRecord
         ];
     }
 
+    public function getArticles()
+    {
+        return $this->hasMany(Article::class,['category_id' => 'id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return CategoryQuery the active query used by this AR class.
