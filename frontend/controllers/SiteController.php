@@ -2,11 +2,16 @@
 
 namespace frontend\controllers;
 
+use common\models\Article;
+use common\models\Category;
+use common\models\Tag;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
+use yii\data\Pagination;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -77,7 +82,17 @@ class SiteController extends Controller
      */
     public function actionIndex(): string
     {
-        return $this->render('index');
+        $data = Article::getAll();
+        $popular = Article::getPopular();
+        $recent = Article::getRecent();
+        $categories = Category::getAll();
+        return $this->render('index',[
+            'articles' => $data['articles'],
+            'pagination' => $data['pagination'],
+            'popular' => $popular,
+            'recent' => $recent,
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -147,6 +162,60 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function actionView($id): string
+    {
+        $article = Article::findOne($id);
+        $tags = Article::getAllArticleTags($id);
+        $popular = Article::getPopular();
+        $recent = Article::getRecent();
+        $categories = Category::getAll();
+        $article->viewedCounter();
+        return $this->render('single',[
+            'article' => $article,
+            'tags' => $tags,
+            'popular' => $popular,
+            'recent' => $recent,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function actionCategory($id): string
+    {
+        $data = Category::getArticlesByCategory($id);
+        $popular = Article::getPopular();
+        $recent = Article::getRecent();
+        $categories = Category::getAll();
+        return $this->render('category',[
+            'articles' => $data['articles'],
+            'pagination' => $data['pagination'],
+            'popular' => $popular,
+            'recent' => $recent,
+            'categories' => $categories,
+        ]);
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function actionTag($id): string
+    {
+        $data = Tag::getArticlesByTag($id);
+        $popular = Article::getPopular();
+        $recent = Article::getRecent();
+        $categories = Category::getAll();
+        return $this->render('tag',[
+            'articles' => $data['articles'],
+            'pagination' => $data['pagination'],
+            'popular' => $popular,
+            'recent' => $recent,
+            'categories' => $categories,
+            ]);
+    }
+
 
     /**
      * Signs user up.

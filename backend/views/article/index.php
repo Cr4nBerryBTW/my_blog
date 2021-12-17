@@ -35,7 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => 'Image',
                     'value' => function($data)
                     {
-                        return Html::img($data->getImage(), ['width' => 200]);
+                        //var_dump(file_exists('http://frontend/web' . $data->getImage()));
+                        return Html::img(  $data->getImage(), ['width' => 200, 'alt' => '123']);
                     }
             ],
             ['class' => 'yii\grid\ActionColumn'],

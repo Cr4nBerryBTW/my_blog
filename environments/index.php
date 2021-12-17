@@ -38,6 +38,7 @@ return [
             'frontend/runtime',
             'frontend/web/assets',
         ],
+
         'setExecutable' => [
             'yii',
             'yii_test',

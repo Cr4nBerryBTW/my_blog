@@ -31,7 +31,8 @@ class ImageUpload extends Model
 
     private function getFolder(): string
     {
-        return Yii::getAlias('@web') . 'uploads/';
+        //var_dump(Yii::getAlias('@frontend') . '/web/uploads/');die;
+        return Yii::getAlias('@frontend') . '/web/uploads/';
     }
 
     private function generateFileName(): string
@@ -59,6 +60,7 @@ class ImageUpload extends Model
     public function saveImage(): string
     {
         $filename = $this->generateFileName();
+        //var_dump($this->getFolder());die;
         $this->image->saveAs($this->getFolder() . $filename);
         return $filename;
     }

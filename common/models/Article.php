@@ -3,7 +3,9 @@
 namespace common\models;
 
 use common\models\query\ArticleQuery;
+use Yii;
 use yii\base\InvalidConfigException;
+use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -73,11 +75,18 @@ class Article extends ActiveRecord
         ];
     }
 
+    public function saveArticle(): bool
+    {
+        $this->user_id = Yii::$app->user->identity->id;
+        return $this->save();
+    }
+
     /**
      * Gets query for [[ArticleTags]].
      *
      * @return ActiveQuery
      */
+
     public function getArticleTags(): ActiveQuery
     {
         return $this->hasMany(ArticleTag::class, ['article_id' => 'id']);
@@ -93,6 +102,16 @@ class Article extends ActiveRecord
         return $this->hasMany(Comment::class, ['article_id' => 'id']);
     }
 
+    public function getAuthor(): ActiveQuery
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function viewedCounter(): bool
+    {
+            $this->viewed += 1;
+            return $this->save(false);
+    }
     /**
      * {@inheritdoc}
      * @return ArticleQuery the active query used by this AR class.
@@ -176,4 +195,48 @@ class Article extends ActiveRecord
     {
         ArticleTag::deleteAll(['article_id' => $this->id]);
     }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function getDate(): string
+    {
+        return Yii::$app->formatter->asDate($this->date);
+    }
+
+    public static function getAll($pageSize = 2): array
+    {
+        $query = Article::find();
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $pageSize]);
+        $articles = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        $data['articles'] = $articles;
+        $data['pagination'] = $pagination;
+
+        return $data;
+    }
+
+
+
+    public static function getPopular(): array
+    {
+        return Article::find()->orderBy('viewed desc')->limit(3)->all();
+    }
+
+    public static function getRecent(): array
+    {
+        return Article::find()->orderBy('date asc')->limit(4)->all();
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public static function getAllArticleTags($id): array
+    {
+        $article = Article::findOne($id);
+        return Tag::findAll(['id' => $article->getSelectedTags()]);
+    }
+
 }
