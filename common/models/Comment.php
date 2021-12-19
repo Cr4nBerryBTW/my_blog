@@ -4,6 +4,8 @@ namespace common\models;
 
 
 use common\models\query\CommentQuery;
+use Yii;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -15,12 +17,17 @@ use yii\db\ActiveRecord;
  * @property int|null $user_id
  * @property int|null $article_id
  * @property int|null $status
+ * @property string|null $date
  *
  * @property Article $article
  * @property User $user
  */
 class Comment extends ActiveRecord
 {
+    /**
+     * @var mixed|null
+     */
+
     /**
      * {@inheritdoc}
      */
@@ -37,6 +44,7 @@ class Comment extends ActiveRecord
         return [
             [['user_id', 'article_id', 'status'], 'integer'],
             [['text'], 'string', 'max' => 255],
+            [['date'], 'date', 'format' =>'php:Y-m-d'],
             [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Article::class, 'targetAttribute' => ['article_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -83,5 +91,30 @@ class Comment extends ActiveRecord
     public static function find(): CommentQuery
     {
         return new CommentQuery(get_called_class());
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function getDate(): string
+    {
+        return Yii::$app->formatter->asDate($this->date);
+    }
+
+    public function isAllowed(): ?int
+    {
+        return $this->status;
+    }
+
+    public function allow(): bool
+    {
+        $this->status = 1;
+        return $this->save(false);
+    }
+
+    public function disallow(): bool
+    {
+        $this->status = 0;
+        return $this->save(false);
     }
 }

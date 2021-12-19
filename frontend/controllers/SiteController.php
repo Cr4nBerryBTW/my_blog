@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Article;
 use common\models\Category;
+use common\models\CommentForm;
 use common\models\Tag;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
@@ -173,6 +174,8 @@ class SiteController extends Controller
         $popular = Article::getPopular();
         $recent = Article::getRecent();
         $categories = Category::getAll();
+        $comments = $article->getArticleComments();
+        $commentForm = new CommentForm();
         $article->viewedCounter();
         return $this->render('single',[
             'article' => $article,
@@ -180,6 +183,8 @@ class SiteController extends Controller
             'popular' => $popular,
             'recent' => $recent,
             'categories' => $categories,
+            'comments' => $comments,
+            'commentForm' => $commentForm,
         ]);
     }
 
@@ -214,6 +219,20 @@ class SiteController extends Controller
             'recent' => $recent,
             'categories' => $categories,
             ]);
+    }
+
+    public function actionComment($id)
+    {
+        $model = new CommentForm();
+        if(Yii::$app->request->isPost)
+        {
+            $model->load(Yii::$app->request->post());
+            if ($model->saveComment($id))
+            {
+                Yii::$app->getSession()->setFlash('comment','Your comment will be add soon!');
+                return $this->redirect(['site/view', 'id'=>$id]);
+            }
+        }
     }
 
 

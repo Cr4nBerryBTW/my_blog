@@ -239,4 +239,9 @@ class Article extends ActiveRecord
         return Tag::findAll(['id' => $article->getSelectedTags()]);
     }
 
+    public function getArticleComments(): array
+    {
+        return $this->getComments()->where(['status' => 1])->all();
+    }
+
 }
