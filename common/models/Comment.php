@@ -31,6 +31,9 @@ class Comment extends ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const STATUS_ALLOW = 1;
+    const STATUS_DISALLOW = 0;
+
     public static function tableName(): string
     {
         return 'comment';
@@ -108,13 +111,13 @@ class Comment extends ActiveRecord
 
     public function allow(): bool
     {
-        $this->status = 1;
+        $this->status = self::STATUS_ALLOW;
         return $this->save(false);
     }
 
     public function disallow(): bool
     {
-        $this->status = 0;
+        $this->status = self::STATUS_DISALLOW;
         return $this->save(false);
     }
 }

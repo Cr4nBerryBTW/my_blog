@@ -22,7 +22,7 @@ use yii\web\IdentityInterface;
  * @property int|null $status
  * @property int|null $created_at
  * @property int|null $updated_at
- * @property string|null $password
+ * @property int|null $isAdmin
  *
  * @property Comment[] $comments
  */
@@ -32,9 +32,6 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 5;
     const STATUS_ACTIVE = 10;
 
-    const ROLE_ADMIN = 60;
-    const ROLE_MODERATOR = 50;
-    const ROLE_USER = 0;
 
     /**
      * {@inheritdoc}
@@ -62,30 +59,10 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            ['role', 'default', 'value' => self::ROLE_USER],
-            ['role', 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_MODERATOR, self::ROLE_USER]],
         ];
     }
 /**/
-    public static function isUserAdmin($username): bool
-    {
-        if (static::findOne(['username' => $username, 'role' => self::ROLE_ADMIN]))
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    public static function isUserModerator($username): bool
-    {
-        if (static::findOne(['username' => $username, 'role' => self::ROLE_MODERATOR]))
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 
     /**

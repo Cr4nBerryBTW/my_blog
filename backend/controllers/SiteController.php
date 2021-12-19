@@ -80,9 +80,18 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            if (Yii::$app->user->identity->isAdmin == 0)
+            {
+               Yii::$app->user->logout();
+            }
             return $this->goBack();
         }
 
+        //if (Yii::$app->user->identity->isAdmin == 0)
+        //{
+        //    Yii::$app->user->logout();
+        //    return $this->goBack();
+        //}
         $model->password = '';
 
         return $this->render('login', [
