@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Article;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -33,10 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'format' => 'html',
                     'label' => 'Image',
-                    'value' => function($data)
+                    'value' => function(Article $article)
                     {
-                        //var_dump(file_exists('http://frontend/web' . $data->getImage()));
-                        return Html::img(  $data->getImage(), ['width' => 200, 'alt' => '123']);
+                        return Html::img(  Yii::$app->params['uploadsUrl'] . $article->getImage(), ['width' => 200, 'alt' => '123']);
                     }
             ],
             ['class' => 'yii\grid\ActionColumn'],
